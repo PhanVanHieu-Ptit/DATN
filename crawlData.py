@@ -5,13 +5,14 @@ import requests
 import csv
 
 import aspose.words as aw
+import shutil
 
 nameFolderRoot = 'doc'
-nameFolderConvertRoot = 'convert'
+nameFolderConvertRoot = 'convert-540'
 nameFolderDeleteRoot = 'deleted'
 folderName = ['nghiDinh', 'nghiQuyet', 'quyetDinh', 'thongTu']
-containSuitNameFileList = [['nd.cp','nd_cp','nd-cp', 'nđ.cp', 'nđ-cp','nđ_cp'],['.'],['.'],['.']]
-containNoSuitNameFileList = [['phụ lục','phu luc'],['phu luc','phuluc','qđ','mẫu','phucap','tt','chuongtrinh','bieuthue'],[],[]]
+containSuitNameFileList = [['nd.cp','nd_cp','nd-cp', 'nđ.cp', 'nđ-cp','nđ_cp'],['.'],['qd','qđ','quyet dinh','quyết định'],['_tt','-tt','.tt']]
+containNoSuitNameFileList = [['phụ lục','phu luc'],['phu luc','phuluc','qđ','mẫu','mau','phucap','tt','chuongtrinh','bieuthue'],['phuluc','quytrinh','quyche','quy che','báo cáo','phụ lục','phu luc'],['quy dinh','quyết định','phụ lục','du thao','phu luc','mau','kèm','duthao']]
 
 def read_file(fileNameRead):
     with open(fileNameRead, encoding='UTF-8') as csv_file:
@@ -20,6 +21,7 @@ def read_file(fileNameRead):
         for row in csv_reader:
             data.append({'name': row[0], 'url': row[1]})
         return data
+
 
 def download_file(filename, url):
     # global req
@@ -86,8 +88,6 @@ def delete_file():
         os.mkdir(nameFolderDeleteRoot)
 
     for i in range(0,len(folderName)):
-        if i==2:
-            break
         print('=========================== ' + folderName[i].upper() + ' ======================================')
         if os.path.exists(os.path.join('url', folderName[i] + '.csv')):
             # read urls from file
@@ -103,10 +103,10 @@ def delete_file():
             for item in nameUrlList:
                 if not (item['name'].lower().endswith('.doc') or item['name'].lower().endswith('.docx') ) or checkContain(item['name'], containNoSuitNameFileList[i]) or not checkContain(item['name'], containSuitNameFileList[i]) :
 
-                    if os.path.exists(os.path.join('doc', folderName[i], item['name'])):
+                    if os.path.exists(os.path.join(nameFolderRoot, folderName[i], item['name'])):
                         fileDeletedList.append(item['name']+'\n')
                         print('deleting file ', item['name'] + ' ....')
-                        os.remove(os.path.join('doc', folderName[i], item['name']))
+                        os.remove(os.path.join(nameFolderRoot, folderName[i], item['name']))
 
             # create folder save file contain file deleted
             if not os.path.exists(os.path.join(nameFolderDeleteRoot, folderName[i])):
@@ -114,7 +114,8 @@ def delete_file():
                 print('*** Create folder ' + nameFolderDeleteRoot + '/' + folderName[i])
                 os.mkdir(os.path.join(nameFolderDeleteRoot, folderName[i]))
             #save list name of doc was deleted
-            write_into_file(os.path.join(folderName[i], folderName[i]+datetime.now().strftime("_%Y-%m-%d_%H--%M--%S.txt")), fileDeletedList)
+            if len(fileDeletedList)!=0:
+                write_into_file(os.path.join(folderName[i], folderName[i]+datetime.now().strftime("_%Y-%m-%d_%H--%M--%S.txt")), fileDeletedList)
 
             print('Total: ',str(len(fileDeletedList)),'files deleted')
             print('--- Done delete ---')
@@ -126,7 +127,7 @@ def convert_file_doc_dox_to_txt():
     if not os.path.exists(nameFolderConvertRoot):
         print('*** Create folder ' + nameFolderConvertRoot)
         os.mkdir(nameFolderConvertRoot)
-    for i in range(0,len(folderName)):
+    for i in range(2,3):#len(folderName)):
         print('=========================== ' + folderName[i].upper() + ' ======================================')
 
         if not os.path.exists(os.path.join(nameFolderConvertRoot, folderName[i])):
@@ -152,6 +153,8 @@ def convert_file_doc_dox_to_txt():
                     try:
                         doc = aw.Document(os.path.join(nameFolderRoot, folderName[i], item['name']))
 
+                        shutil.move(os.path.join(nameFolderRoot, folderName[i], item['name']), os.path.join('doc-540', folderName[i], item['name']))
+
                         print('converting file '+ item['name'] +' to file '+newName + ' ....')
 
                         doc.save(os.path.join(nameFolderConvertRoot, folderName[i], newName))
@@ -161,23 +164,18 @@ def convert_file_doc_dox_to_txt():
                         print(NameError)
                     except:
                         print("Something else went wrong")
+                if numFileConverted == 540:
+                    break
             print('Total: ',str(numFileConverted),'files converted')
             print('--- Done convert ---')
+
         else:
             print('Don\'t exist file   ' + folderName[i] + '.csv !')
 
 if __name__ == '__main__':
     print('===================== START! ============================')
     # crawl_data()
-    delete_file()
-    # convert_file_doc_dox_to_txt()
-    # temp = '01_2019_ND-CP_404090.doc'
-    # containSuitNameFileList = [['nd.cp','nd_cp','nd-cp', 'nđ.cp', 'nđ-cp','nđ_cp']]
-    # print(checkContain(temp, containSuitNameFileList[0]))
-
-    # write_into_file('test.txt',['test\n','a\n'])
-
-
-
+    # delete_file()
+    convert_file_doc_dox_to_txt()
 
     print('===================== END! ============================')
