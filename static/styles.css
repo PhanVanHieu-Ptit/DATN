@@ -1,0 +1,66 @@
+/* static/styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    background-color: #0074a2;
+    color: white;
+    padding: 10px;
+}
+
+form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+select, input[type="file"], input[type="submit"] {
+    padding: 10px;
+    margin: 5px;
+}
+
+#history {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 20px;
+}
+
+img[title] {
+    position: relative;
+    cursor: help;
+}
+
+img[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    left: 0;
+    bottom: 100%;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.image-container {
+    border-radius: 50px;
+}
+
+#moonButton {
+   display: none;
+}
+
+#engButton{
+   display: none;
+}

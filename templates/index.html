@@ -1,0 +1,81 @@
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <title>Document Category Classifier</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Document Category Classifier</h1>-->
+<!--    <form method="POST" enctype="multipart/form-data" action="/upload">-->
+<!--        <label for="file">Upload a file:</label>-->
+<!--        <input type="file" name="file" id="file" required><br><br>-->
+<!--        <label for="model_name">Choose a model:</label>-->
+<!--        <select name="model_name" id="model_name">-->
+<!--            <option value="decision_tree_model_2023-10-30_21&#45;&#45;53&#45;&#45;25.joblib">Decision tree model</option>-->
+<!--            <option value="svm_model_2023-10-30_14&#45;&#45;13&#45;&#45;39.pkl">SVM model</option>-->
+<!--        </select><br><br>-->
+<!--        <input type="submit" value="Classify">-->
+<!--    </form>-->
+
+<!--    {% if result %}-->
+<!--        <h2>Classification Result:</h2>-->
+<!--        <p>{{ result }}</p>-->
+<!--    {% endif %}-->
+<!--</body>-->
+<!--</html>-->
+
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHÂN LOẠI VĂN BẢN QUY PHẠM PHÁP LUẬT</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link id="theme-link" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='theme-light.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+<button id="sunButton" onclick="changeTheme('light')">
+    <img class="image-container" src="{{ url_for('static', filename='sun.png') }}"  width="30" height="30" alt="Chế độ sáng">
+</button>
+<button id="moonButton" onclick="changeTheme('dark')">
+    <img src="{{ url_for('static', filename='moon.png') }}"  width="30" height="30" alt="Chế độ tối">
+</button>
+
+<button id="engButton" onclick="changeLanguage('en')">
+    <img class="image-container" src="{{ url_for('static', filename='uk-flag.svg') }}"  width="30" height="30" alt="English">
+</button>
+<button id="viButton" onclick="changeLanguage('vi')">
+    <img src="{{ url_for('static', filename='viet-nam-flag.svg') }}"  width="30" height="30" alt="Tiếng Việt">
+</button>
+<h1>PHÂN LOẠI VĂN BẢN QUY PHẠM PHÁP LUẬT</h1>
+    <form method="POST" enctype="multipart/form-data" action="/upload">
+        <label for="file">Tải tệp:</label>
+        <input type="file" name="file" id="file" required><br><br>
+        <label for="model_name">Chọn mô hình:</label>
+        <select name="model_name" id="model_name">
+            <option value="decision_tree_model_2023-11-12_03--37--28-95.joblib">Mô hình cây quyết định</option>
+            <option value="svm_model_2023-11-12_04--09--22-85.pkl">Mô hình SVM</option>
+        </select><br><br>
+        <input type="submit" value="Phân loại">
+    </form>
+{% if result %}
+<p>Kết quả dự đoán: {{ result }}</p>
+{% endif %}
+<div id="history">
+    <h2>LỊCH SỬ</h2>
+    {% if history %}
+    {% for item in history.split("\n") %}
+    <p>{{ item }}</p>
+    {% endfor %}
+    {% endif %}
+</div>
+<object data="{{ pdf_file_path }}" type="application/pdf" width="100%" height="800">
+        <p>Trình duyệt của bạn không hỗ trợ xem tệp PDF. Bạn có thể tải xuống tệp <a href="{{ pdf_file_path }}">tại đây</a>.</p>
+    </object>
+</body>
+</html>
+
+
+
+
