@@ -10,7 +10,7 @@ endPoint = '/TW/Pages/vanban.aspx?dvid=13'
 ids = [18,20,21,22]
 # limits = [124,442,1302,1355]
 nameDocList = ['nghiQuyet.csv','nghiDinh.csv','quyetDinh.csv','thongTu.csv']
-nameFolderRoot = 'url_doc'
+nameFolderRoot = 'url_backup'
 limit = 124
 
 def crawl_url(numDocList):
@@ -62,7 +62,6 @@ def write_into_file(nameFile, docs):
         # name,url
         for doc in docs:
             writer.writerow(doc.values())
-
 
 
 def crawl_url_from_web():
